@@ -1,0 +1,50 @@
+.wg-angular-easel {
+
+  header {
+    text-align: center;
+  }
+
+  .wg-angular-selected-elements-container {
+    position: relative;
+    width: 420px;
+    left: -210px;
+    margin-left: 50%;
+  }
+
+  .wg-angular-selected-element {
+    width: 120px;
+    height: 30px;
+    color: #FFFFFF;
+    background-color: #000000;
+    padding: 4px 5px 0px 5px;
+    margin-right: 20px;
+
+    .wg-angular-selected-element-name {
+      display: inline-block;
+      width: 75px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .wg-angular-selected-element-controls-separation {
+      margin-right: 10px;
+    }
+
+    button {
+      line-height: inherit;
+      font-size: 18px;
+      color: #FFFFFF;
+      text-shadow: none;
+      opacity: 1;
+      margin-right: 5px;
+
+      &:hover {
+        opacity: .8;
+      }
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}

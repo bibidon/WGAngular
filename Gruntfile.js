@@ -27,15 +27,19 @@ module.exports = function (grunt) {
                         '$',
                         'module',
                         '_',
-                        'mustache'
+                        'angular'
                     ]
                 }
             }
         },
         watch: {
-            public: {
+            thirdParty: {
                 files: ['public/thirdParty/**/*.*'],
                 tasks: ['uglify:thirdParty', 'cssmin:thirdParty']
+            },
+            dev: {
+                files: ['src/app/**/*.*'],
+                tasks: ['uglify:dev', 'sass:compile', 'cssmin:dev']
             }
         },
         // jsttojs: {
@@ -87,19 +91,23 @@ module.exports = function (grunt) {
                         'public/thirdParty/jquery/jquery.min.js',
                         'public/thirdParty/angular/angular.min.js',
                         'public/thirdParty/lodash/lodash.min.js',
-                        'node_modules/bootstrap/dist/js/bootstrap.min.js'
+                        'public/thirdParty/bootstrap/js/bootstrap.min.js'
+                    ]
+                }
+            },
+            dev: {
+                options: {
+                    compress: false,
+                    beautify: true,
+                    mangle: false,
+                    banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */'
+                },
+                files: {
+                    'compiled/js/WGAngular.js': [
+                        'src/app/WGAngular.js'
                     ]
                 }
             }
-            //dev: {
-            //    options: {
-            //        compress: false,
-            //        beautify: true,
-            //        mangle: false,
-            //        banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */'
-            //    },
-            //    files: grunt.file.readJSON('_uglify/uglify.dev.json')
-            //},
             //prod: {
             //    options: {
             //        compress: {},
@@ -110,26 +118,26 @@ module.exports = function (grunt) {
             //    files: grunt.file.readJSON('_uglify/uglify.prod.json')
             //}
         },
-        // sass: {
-        //     check: {
-        //         options: {
-        //             check: true
-        //         }
-        //     },
-        //     compile: {
-        //         options: {
-        //             sourcemap: 'none',
-        //             style: 'expanded'
-        //         },
-        //         files: [{
-        //             expand: true,
-        //             cwd: 'src/scss',
-        //             src: ['**/*.scss'],
-        //             dest: 'compiled/scss',
-        //             ext: '.css'
-        //         }]
-        //     }
-        // },
+        sass: {
+            check: {
+                options: {
+                    check: true
+                }
+            },
+            compile: {
+                options: {
+                    sourcemap: 'none',
+                    style: 'expanded'
+                },
+                files: [{
+                    expand: true,
+                    cwd: 'src/scss',
+                    src: ['**/*.scss'],
+                    dest: 'compiled/scss',
+                    ext: '.css'
+                }]
+            }
+        },
         cssmin: {
             thirdParty: {
                 options: {
@@ -138,14 +146,25 @@ module.exports = function (grunt) {
                 },
                 files: {
                     'compiled/css/thirdParty.css': [
-                        'node_modules/bootstrap/dist/css/bootstrap.min.css'
+                        'public/thirdParty/bootstrap/css/bootstrap.min.css'
+                    ]
+                }
+            },
+            dev: {
+                options: {
+                    shorthandCompacting: false,
+                    roundingPrecision: -1
+                },
+                files: {
+                    'compiled/css/easel.css': [
+                        'compiled/scss/easel.css'
                     ]
                 }
             }
         },
         concurrent: {
             watch: {
-                tasks: ['watch:public'],
+                tasks: ['watch:thirdParty', 'watch:dev'],
                 options: {
                     limit: 7,
                     logConcurrentOutput: true
@@ -160,7 +179,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
-    // grunt.loadNpmTasks('grunt-contrib-sass');
+    grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-jslint');
 
@@ -169,5 +188,5 @@ module.exports = function (grunt) {
 
     //grunt.registerTask('development', ['clean', 'copy-resources', 'jsttojs', 'jslint:client', 'saas-compile', 'uglify:thirdParty', 'uglify:dev', 'cssmin:thirdParty', 'cssmin:dev', 'express:dev', 'concurrent:watch']);
     //grunt.registerTask('emulate_prod', ['clean', 'copy-resources', 'jsttojs', 'jslint:client', 'saas-compile', 'uglify:thirdParty', 'uglify:prod', 'cssmin:thirdParty', 'cssmin:prod', 'express:dev', 'keepalive']);
-    grunt.registerTask('development', ['clean', 'copy-resources', 'jslint:client', 'uglify:thirdParty', 'cssmin:thirdParty', 'concurrent:watch']);
+    grunt.registerTask('development', ['clean', 'copy-resources', 'jslint:client', 'sass:compile', 'uglify:thirdParty', 'uglify:dev', 'cssmin:thirdParty', 'cssmin:dev', 'concurrent:watch']);
 };
