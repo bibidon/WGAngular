@@ -12,20 +12,90 @@
 <script src="../../compiled/js/thirdParty.js"></script>
 <script src="../../compiled/js/WGAngular.js"></script>
 <div class="wg-angular-easel container" ng-controller="EaselController as easel">
+
     <header>
         <h3>Elements selection</h3>
-        <h6>Now you have {{easel.model.info}}:</h6>
+        <h6>Now you have {{model.info}}:</h6>
     </header>
+
     <div class="wg-angular-selected-elements-container clearfix">
         <div class="wg-angular-selected-element pull-left"
-             ng-repeat="element in easel.model.selectedElements track by $id(element)">
+             ng-repeat="element in model.selectedElements track by $id(element)">
             <span class="wg-angular-selected-element-name">{{element.name}}</span>
             <div class="wg-angular-selected-element-controls pull-right">
                 <span class="wg-angular-selected-element-controls-separation">|</span>
-                <button type="button" class="close" aria-label="Close" ng-click="easel.deletedSelected(element.id)"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" aria-label="Close" ng-click="easel.deletedSelected(element.id)">
+                    <span aria-hidden="true">&times;</span></button>
             </div>
         </div>
     </div>
+
+    <div class="wg-angular-easel-btn-container">
+        <button type="button" class="btn btn-success" ng-click="easel.changeSelection()">change your selection</button>
+    </div>
+
+</div>
+
+<div class="wg-angular-modal" ng-controller="ModalController as modal">
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal
+    </button>
+
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Modal elements selection</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="wg-angular-modal-body-header">
+                        <input type="text">
+                        <select>
+                            <option value="*.*">without filter</option>
+                            <option value=">10">number > 10</option>
+                            <option value=">100">number > 100</option>
+                            <option value=">200">number > 200</option>
+                        </select>
+                    </div>
+
+                    <div class="wg-angular-modal-body-content">
+                        <div class="wg-angular-modal-body-content-element">
+                            <input type="checkbox">
+                            <span>name</span>
+                        </div>
+                    </div>
+
+                    <div class="wg-angular-modal-body-footer">
+                        <div class="wg-angular-modal-body-footer-info">
+                            <h6>Now you have {{model.info}}:</h6>
+                        </div>
+                        <div>
+                            <div class="wg-angular-modal-body-footer-selected-element pull-left"
+                                 ng-repeat="element in model.selectedElements track by $id(element)">
+                                <span class="wg-angular-modal-body-footer-selected-element-name">{{element.name}}</span>
+                                <div class="wg-angular-modal-body-footer-selected-element-controls pull-right">
+                                    <span class="wg-angular-modal-body-footer-selected-element-controls-separation">|</span>
+                                    <span class="wg-angular-modal-body-footer-selected-element-controls-separation">|</span>
+                                    <button type="button" class="close" aria-label="Close"
+                                            ng-click="easel.deletedSelected(element.id)">
+                                        <span aria-hidden="true">&times;</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 </body>
 
