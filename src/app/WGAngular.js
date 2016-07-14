@@ -1,7 +1,9 @@
 /**
  * Created by DenisLutcevich on 01/07/2016.
  */
-var app = angular.module('WGAngular', []);
+'use strict';
+
+var app = angular.module('WGAngular', ['ngResource']);
 
 app.controller('EaselController', ['$scope', function ($scope) {
     $scope.model = {
@@ -38,14 +40,21 @@ app.controller('EaselController', ['$scope', function ($scope) {
     };
 
     this.changeSelection = function () {
-
     };
 
     this.initModel();
 }]);
 
-app.controller('ModalController', ['$scope', function ($scope) {
-
+app.factory('dataGetter', ['$resource', function ($resource) {
+    return $resource('../../public/data/:id.json', {}, {
+        query: {
+            method: 'GET',
+            params: {id: 'testData'},
+            isArray: true
+        }
+    });
 }]);
 
-app.service();
+app.controller('ModalController', ['$scope', 'dataGetter', function ($scope, dataGetter) {
+    this.model = dataGetter.query();
+}]);
