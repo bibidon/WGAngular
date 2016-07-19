@@ -8,25 +8,20 @@
     <link rel="stylesheet" href="../../compiled/css/thirdParty.css">
     <link rel="stylesheet" href="../../compiled/css/easel.css">
 </head>
-<body>
+<body ng-controller="WGController">
 <script src="../../compiled/js/thirdParty.js"></script>
 <script src="../../compiled/js/WGAngular.js"></script>
 <div class="wg-angular-easel container" ng-controller="EaselController as easel">
 
     <header>
         <h3>Elements selection</h3>
-        <h6>Now you have {{model.info}}:</h6>
+        <h6>Now you have {{selectedInfo.text}}:</h6>
     </header>
 
     <div class="wg-angular-selected-elements-container clearfix">
         <div class="wg-angular-selected-element pull-left"
              ng-repeat="element in model.selectedElements track by $id(element)">
-            <span class="wg-angular-selected-element-name">{{element.name}}</span>
-            <div class="wg-angular-selected-element-controls pull-right">
-                <span class="wg-angular-selected-element-controls-separation">|</span>
-                <button type="button" class="close" aria-label="Close" ng-click="easel.deletedSelected(element.id)">
-                    <span aria-hidden="true">&times;</span></button>
-            </div>
+            <selected-element></selected-element>
         </div>
     </div>
 
@@ -75,13 +70,7 @@
                         <div>
                             <div class="wg-angular-modal-body-footer-selected-element pull-left"
                                  ng-repeat="element in model.selectedElements track by $id(element)">
-                                <span class="wg-angular-modal-body-footer-selected-element-name"></span>
-                                <div class="wg-angular-modal-body-footer-selected-element-controls pull-right">
-                                    <span class="wg-angular-modal-body-footer-selected-element-controls-separation">|</span>
-                                    <span class="wg-angular-modal-body-footer-selected-element-controls-separation">|</span>
-                                    <button type="button" class="close" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span></button>
-                                </div>
+                                <selected-element></selected-element>
                             </div>
                         </div>
                     </div>
