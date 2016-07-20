@@ -5,76 +5,74 @@
 
 var app = angular.module('WGAngular', ['ngResource']);
 
-app.controller('WGController', ['$scope', 'modelGetter', 'selectedItemsModelGetter', 'selectedItemsModelUpdater', function ($scope, modelGetter, selectedItemsModelGetter, selectedItemsModelUpdater) {
-    modelGetter.query().$promise.then(function (model) {
-        $scope.model = model;
-        $scope.selectedItemsModel = $scope.selectedItemsModel || selectedItemsModelGetter.query($scope.model);
+app.factory('modelsGetter', ['$resource', function ($resource) {
+    var _model = {},
+        _selectedItemsModel = {},
+        self = this,
+        getModel = (function () {
+            return $resource('../../public/data/:id.json', {}, {
+                query: {
+                    method: 'GET',
+                    params: {id: 'testData'},
+                    isArray: true
+                }
+            });
+        }()),
+        getSelectedItemsModel = function (model) {
+            var items = [], i, ln;
 
-        selectedItemsModelUpdater.update($scope.selectedItemsModel);
+            for (i = 0, ln = 3; i < ln; i++) {
+                items.push(model[i]);
+            }
+
+            return items;
+        };
+
+    _model.elements = [];
+
+    _selectedItemsModel.headLine = '';
+    _selectedItemsModel.elements = [];
+
+    getModel.query().$promise.then(function (model) {
+        _model.elements = model;
+
+        _selectedItemsModel.elements = getSelectedItemsModel(_model.elements);
+
+        self.update(_selectedItemsModel.elements);
     });
-}]);
 
-app.factory('modelGetter', ['$resource', function ($resource) {
-    return $resource('../../public/data/:id.json', {}, {
-        query: {
-            method: 'GET',
-            params: {id: 'testData'},
-            isArray: true
-        }
-    });
-}]);
-
-app.service('selectedItemsModelGetter', [function () {
-    this.query = function (model) {
-        var _model = [], i, ln;
-
-        for (i = 0, ln = 3; i < ln; i++) {
-            _model.push(model[i]);
-        }
-
+    this.getModel = function () {
         return _model;
     };
-}]);
-
-app.service('selectedItemsModelUpdater', [function () {
-    var selectedItems = {};
-
-    selectedItems.headLine = '';
-    selectedItems.elements = [];
 
     this.getSelectedItems = function () {
-        return selectedItems;
+        return _selectedItemsModel;
     };
 
     this.update = function (model) {
         var quantity = model.length;
 
-        selectedItems.headLine = quantity > 0 ? quantity + ' elements' : quantity + ' element';
-        selectedItems.elements = model;
+        _selectedItemsModel.headLine = quantity > 0 ? quantity + ' elements' : quantity + ' element';
+        _selectedItemsModel.elements = model;
     };
 
     return {
+        getModel: this.getModel,
         getSelectedItems: this.getSelectedItems,
         update: this.update
     };
 }]);
 
-app.controller('EaselController', ['$scope', 'selectedItemsModelUpdater', function ($scope, selectedItemsModelUpdater) {
-    $scope.selectedItems = selectedItemsModelUpdater.getSelectedItems();
-
-    this.changeSelection = function () {
-    };
+app.controller('EaselController', ['$scope', 'modelsGetter', function ($scope, modelsGetter) {
+    $scope.selectedItems = modelsGetter.getSelectedItems();
 }]);
 
-app.controller('ModalController', ['$scope', 'selectedItemsModelUpdater', 'modelGetter', function ($scope, selectedItemsModelUpdater, modelGetter) {
-    $scope.selectedItems = selectedItemsModelUpdater.getSelectedItems();
-
-    modelGetter.query().$promise.then(function (model) {
-        $scope.model = model;
-    });
+app.controller('ModalController', ['$scope', 'modelsGetter', function ($scope, modelsGetter) {
+    $scope.model = modelsGetter.getModel();
+    $scope.selectedItems = modelsGetter.getSelectedItems();
 }]);
 
-app.directive('selectedElement', ['selectedItemsModelUpdater', function (selectedItemsModelUpdater) {
+app.directive('selectedElement', ['modelsGetter', function (modelsGetter) {
     function link($scope, $element, $attr) {
     }
 
@@ -84,7 +82,7 @@ app.directive('selectedElement', ['selectedItemsModelUpdater', function (selecte
 
             $scope.selectedItems.elements.splice(index, 1);
 
-            selectedItemsModelUpdater.update($scope.selectedItems.elements);
+            modelsGetter.update($scope.selectedItems.elements);
         };
     }
 

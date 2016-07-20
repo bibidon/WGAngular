@@ -7,8 +7,9 @@
 
     <link rel="stylesheet" href="../../compiled/css/thirdParty.css">
     <link rel="stylesheet" href="../../compiled/css/easel.css">
+    <link rel="stylesheet" href="../../compiled/css/modal.css">
 </head>
-<body ng-controller="WGController">
+<body>
 <script src="../../compiled/js/thirdParty.js"></script>
 <script src="../../compiled/js/WGAngular.js"></script>
 <div class="wg-angular-easel container" ng-controller="EaselController as easel">
@@ -23,15 +24,12 @@
     </div>
 
     <div class="wg-angular-easel-btn-container">
-        <button type="button" class="btn btn-success" ng-click="easel.changeSelection()">change your selection</button>
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bs-example-modal-lg">change your selection</button>
     </div>
 
 </div>
 
 <div class="wg-angular-modal" ng-controller="ModalController as modal">
-
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal
-    </button>
 
     <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
         <div class="modal-dialog">
@@ -55,7 +53,7 @@
 
                     <div class="wg-angular-modal-body-content">
                         <div class="wg-angular-modal-body-content-element"
-                             ng-repeat="element in model track by $id(element)">
+                             ng-repeat="element in model.elements track by $id(element)">
                             <input type="checkbox">
                             <span>{{element.name}}</span>
                         </div>

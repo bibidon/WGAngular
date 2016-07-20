@@ -38,18 +38,10 @@ module.exports = function (grunt) {
                 tasks: ['uglify:thirdParty', 'cssmin:thirdParty']
             },
             dev: {
-                files: ['src/app/**/*.*'],
+                files: ['src/**/*.*'],
                 tasks: ['uglify:dev', 'sass:compile', 'cssmin:dev']
             }
         },
-        // jsttojs: {
-        //     name: "q;window.AdHoc=window.AdHoc||{};window.AdHoc.templates=window.AdHoc.templates||{};window.AdHoc.templates",
-        //     root: 'public/templates/',
-        //     output: 'compiled/templates/Templates.js',
-        //     ext: 'html',
-        //     removebreak: true,
-        //     amd: false
-        // },
         copy: {
             thirdParty: {
                 files: [{
@@ -165,6 +157,9 @@ module.exports = function (grunt) {
                 files: {
                     'compiled/css/easel.css': [
                         'compiled/scss/easel.css'
+                    ],
+                    'compiled/css/modal.css': [
+                        'compiled/scss/modal.css'
                     ]
                 }
             }
@@ -182,7 +177,6 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    // grunt.loadNpmTasks('grunt-jsttojs');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
@@ -191,9 +185,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-jslint');
 
     grunt.registerTask('copy-resources', ['copy:thirdParty']);
-    //grunt.registerTask('saas-compile', ['sass:check', 'sass:compile']);
+    grunt.registerTask('sass-compile', ['sass:check', 'sass:compile']);
 
-    //grunt.registerTask('development', ['clean', 'copy-resources', 'jsttojs', 'jslint:client', 'saas-compile', 'uglify:thirdParty', 'uglify:dev', 'cssmin:thirdParty', 'cssmin:dev', 'express:dev', 'concurrent:watch']);
-    //grunt.registerTask('emulate_prod', ['clean', 'copy-resources', 'jsttojs', 'jslint:client', 'saas-compile', 'uglify:thirdParty', 'uglify:prod', 'cssmin:thirdParty', 'cssmin:prod', 'express:dev', 'keepalive']);
-    grunt.registerTask('development', ['clean', 'copy-resources', 'jslint:client', 'sass:compile', 'uglify:thirdParty', 'uglify:dev', 'cssmin:thirdParty', 'cssmin:dev', 'concurrent:watch']);
+    grunt.registerTask('development', ['clean', 'copy-resources', 'jslint:client', 'sass-compile', 'uglify:thirdParty', 'uglify:dev', 'cssmin:thirdParty', 'cssmin:dev', 'concurrent:watch']);
 };
