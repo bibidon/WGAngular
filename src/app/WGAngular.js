@@ -5,12 +5,12 @@
 
 var app = angular.module('WGAngular', ['ngResource']);
 
-app.controller('WGController', ['$scope', 'modelGetter', 'selectedItemsModelGetter', 'modelUpdater', function ($scope, dataGetter, selectedItemsModelGetter, modelUpdater) {
-    dataGetter.query().$promise.then(function (model) {
+app.controller('WGController', ['$scope', 'modelGetter', 'selectedItemsModelGetter', 'selectedItemsModelUpdater', function ($scope, modelGetter, selectedItemsModelGetter, selectedItemsModelUpdater) {
+    modelGetter.query().$promise.then(function (model) {
         $scope.model = model;
         $scope.selectedItemsModel = $scope.selectedItemsModel || selectedItemsModelGetter.query($scope.model);
 
-        modelUpdater.update($scope.selectedItemsModel);
+        selectedItemsModelUpdater.update($scope.selectedItemsModel);
     });
 }]);
 
@@ -33,64 +33,65 @@ app.service('selectedItemsModelGetter', [function () {
         }
 
         return _model;
-    }
+    };
 }]);
 
-app.service('modelUpdater', [function () {
-    var selectedInfo = {};
+app.service('selectedItemsModelUpdater', [function () {
+    var selectedItems = {};
 
-    selectedInfo.text = '';
+    selectedItems.headLine = '';
+    selectedItems.elements = [];
 
-    this.getSelectedInfo = function () {
-      return selectedInfo;
+    this.getSelectedItems = function () {
+        return selectedItems;
     };
 
     this.update = function (model) {
         var quantity = model.length;
 
-        selectedInfo.text = quantity > 0 ? quantity + ' elements' : quantity + ' element';
+        selectedItems.headLine = quantity > 0 ? quantity + ' elements' : quantity + ' element';
+        selectedItems.elements = model;
     };
 
     return {
-        getSelectedInfo: this.getSelectedInfo,
+        getSelectedItems: this.getSelectedItems,
         update: this.update
     };
 }]);
 
-app.controller('EaselController', ['$scope', 'modelUpdater', function ($scope, modelUpdater) {
-    var self = this;
-
-    self.selectedInfo.text = modelUpdater.getSelectedInfo();
-
-    $scope.$watch('selectedInfo', function (newValue, oldValue) {
-        debugger;
-        if (newValue !== oldValue) {
-            self.selectedInfo = modelUpdater.getSelectedInfo();
-        }
-    });
-
-    this.deletedSelected = function (id) {
-        var index = _.findIndex($scope.model.selectedElements, {'id': id});
-
-        $scope.model.selectedElements.splice(index, 1);
-
-        this.updateModelInfo();
-    };
+app.controller('EaselController', ['$scope', 'selectedItemsModelUpdater', function ($scope, selectedItemsModelUpdater) {
+    $scope.selectedItems = selectedItemsModelUpdater.getSelectedItems();
 
     this.changeSelection = function () {
     };
 }]);
 
-app.controller('ModalController', ['$scope', 'modelGetter', function ($scope, dataGetter) {
+app.controller('ModalController', ['$scope', 'selectedItemsModelUpdater', 'modelGetter', function ($scope, selectedItemsModelUpdater, modelGetter) {
+    $scope.selectedItems = selectedItemsModelUpdater.getSelectedItems();
+
+    modelGetter.query().$promise.then(function (model) {
+        $scope.model = model;
+    });
 }]);
 
-app.directive('selectedElement', [function () {
-    function link(scope, element, attr) {
+app.directive('selectedElement', ['selectedItemsModelUpdater', function (selectedItemsModelUpdater) {
+    function link($scope, $element, $attr) {
+    }
+
+    function controller($scope, $element, $attrs, $transclude) {
+        $scope.deletedSelected = function (id) {
+            var index = _.findIndex($scope.selectedItems.elements, {'id': id});
+
+            $scope.selectedItems.elements.splice(index, 1);
+
+            selectedItemsModelUpdater.update($scope.selectedItems.elements);
+        };
     }
 
     return {
         restrict: 'E',
         templateUrl: '../../public/templates/selectedElement.html',
-        link: link
+        link: link,
+        controller: controller
     };
 }]);

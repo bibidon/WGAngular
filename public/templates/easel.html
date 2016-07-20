@@ -15,14 +15,11 @@
 
     <header>
         <h3>Elements selection</h3>
-        <h6>Now you have {{selectedInfo.text}}:</h6>
+        <h6>Now you have {{selectedItems.headLine}}:</h6>
     </header>
 
     <div class="wg-angular-selected-elements-container clearfix">
-        <div class="wg-angular-selected-element pull-left"
-             ng-repeat="element in model.selectedElements track by $id(element)">
-            <selected-element></selected-element>
-        </div>
+        <selected-element></selected-element>
     </div>
 
     <div class="wg-angular-easel-btn-container">
@@ -57,21 +54,19 @@
                     </div>
 
                     <div class="wg-angular-modal-body-content">
-                        <div class="wg-angular-modal-body-content-element">
+                        <div class="wg-angular-modal-body-content-element"
+                             ng-repeat="element in model track by $id(element)">
                             <input type="checkbox">
-                            <span>name</span>
+                            <span>{{element.name}}</span>
                         </div>
                     </div>
 
                     <div class="wg-angular-modal-body-footer">
                         <div class="wg-angular-modal-body-footer-info">
-                            <!--<h6>Now you have {{model.info}}:</h6>-->
+                            <h6>Now you have {{selectedItems.headLine}}:</h6>
                         </div>
                         <div>
-                            <div class="wg-angular-modal-body-footer-selected-element pull-left"
-                                 ng-repeat="element in model.selectedElements track by $id(element)">
-                                <selected-element></selected-element>
-                            </div>
+                            <selected-element></selected-element>
                         </div>
                     </div>
 
