@@ -1,4 +1,74 @@
+.wg-angular-modal {
+
+  .modal-dialog {
+    width: 450px;
+
+    .modal-content {
+      background: #3F3F3F;
+
+      .modal-header,
+      button {
+        color: #FFFFFF;
+      }
+
+      .modal-header {
+        border: none;
+      }
+    }
+  }
+}
+
+.wg-angular-modal-body-header {
+  margin-bottom: 15px;
+
+  label {
+    color: #FFFFFF;
+    font-weight: 100;
+    margin-right: 10px;
+  }
+}
+
+.wg-angular-search-container {
+  input {
+    width: 135px;
+    font-size: 12px;
+  }
+}
+
+.wg-angular-filter-container {
+  select {
+    width: 135px;
+    height: 23px;
+    font-size: 12px;
+  }
+}
+
 .wg-angular-modal-body-content {
-  height: 300px;
+  height: 400px;
   overflow: auto;
+  background: #000000;
+}
+
+.wg-angular-modal-body-content-element {
+  color: #FFFFFF;
+  padding: 5px 10px;
+
+  &:first-child {
+    padding-top: 10px;
+  }
+
+  &:last-child {
+    padding-bottom: 10px;
+  }
+
+  input {
+    margin: 0px;
+  }
+
+  label {
+    position: relative;
+    bottom: 2px;
+    margin: 0px;
+    font-weight: 100;
+  }
 }

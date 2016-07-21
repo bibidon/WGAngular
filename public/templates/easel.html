@@ -24,7 +24,9 @@
     </div>
 
     <div class="wg-angular-easel-btn-container">
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bs-example-modal-lg">change your selection</button>
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bs-example-modal-lg">change your
+            selection
+        </button>
     </div>
 
 </div>
@@ -41,21 +43,27 @@
                 </div>
                 <div class="modal-body">
 
-                    <div class="wg-angular-modal-body-header">
-                        <input type="text">
-                        <select>
-                            <option value="*.*">without filter</option>
-                            <option value=">10">number > 10</option>
-                            <option value=">100">number > 100</option>
-                            <option value=">200">number > 200</option>
-                        </select>
+                    <div class="wg-angular-modal-body-header clearfix">
+                        <span class="wg-angular-search-container pull-left">
+                            <label for="wg-angular-search">Search</label>
+                            <input id="wg-angular-search" type="text">
+                        </span>
+                        <span class="wg-angular-filter-container pull-right">
+                            <label for="wg-angular-filter">Filter</label>
+                            <select id="wg-angular-filter">
+                                <option value="*.*">without filter</option>
+                                <option value=">10">number > 10</option>
+                                <option value=">100">number > 100</option>
+                                <option value=">200">number > 200</option>
+                            </select>
+                        </span>
                     </div>
 
                     <div class="wg-angular-modal-body-content">
                         <div class="wg-angular-modal-body-content-element"
                              ng-repeat="element in model.elements track by $id(element)">
-                            <input type="checkbox">
-                            <span>{{element.name}}</span>
+                            <input id={{element.id}} type="checkbox">
+                            <label for={{element.id}}>{{element.name}}</label>
                         </div>
                     </div>
 
