@@ -70,6 +70,14 @@ app.controller('EaselController', ['$scope', 'modelsGetter', function ($scope, m
 app.controller('ModalController', ['$scope', 'modelsGetter', function ($scope, modelsGetter) {
     $scope.model = modelsGetter.getModel();
     $scope.selectedItems = modelsGetter.getSelectedItems();
+
+    $scope.isChecked = function (id) {
+        return !!_.find(this.selectedItems.elements, {'id': id});
+    };
+
+    $scope.changed = function (id, isCheck) {
+        debugger;
+    };
 }]);
 
 app.directive('selectedElement', ['modelsGetter', function (modelsGetter) {
@@ -77,7 +85,7 @@ app.directive('selectedElement', ['modelsGetter', function (modelsGetter) {
     }
 
     function controller($scope, $element, $attrs, $transclude) {
-        $scope.deletedSelected = function (id) {
+        $scope.deleteSelected = function (id) {
             var index = _.findIndex($scope.selectedItems.elements, {'id': id});
 
             $scope.selectedItems.elements.splice(index, 1);

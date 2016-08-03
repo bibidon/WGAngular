@@ -7,11 +7,15 @@
       background: #3F3F3F;
 
       .modal-header,
-      button {
+      .modal-header button {
         color: #FFFFFF;
       }
 
       .modal-header {
+        border: none;
+      }
+
+      .modal-footer {
         border: none;
       }
     }
@@ -71,4 +75,52 @@
     margin: 0px;
     font-weight: 100;
   }
+}
+
+.wg-angular-modal-body-footer {
+
+  .wg-angular-selected-element {
+    width: 120px;
+    height: 30px;
+    color: #FFFFFF;
+    background-color: #000000;
+    padding: 4px 5px 0px 5px;
+    margin-right: 20px;
+
+    &:last-child {
+      margin-right: 0px;
+    }
+  }
+
+  .wg-angular-selected-element-name {
+    display: inline-block;
+    width: 75px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .wg-angular-selected-element-controls-separation {
+    margin-right: 10px;
+  }
+
+  button {
+    line-height: inherit;
+    font-size: 18px;
+    color: #FFFFFF;
+    text-shadow: none;
+    opacity: 1;
+    margin-right: 5px;
+
+    &:hover {
+      opacity: .8;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.wg-angular-modal-body-footer-info {
+  color: #FFFFFF;
 }

@@ -59,21 +59,22 @@
                         </span>
                     </div>
 
-                    <div class="wg-angular-modal-body-content">
+                    <form class="wg-angular-modal-body-content" name="wgForm">
                         <div class="wg-angular-modal-body-content-element"
                              ng-repeat="element in model.elements track by $id(element)">
-                            <input id={{element.id}} type="checkbox">
+                            <input id={{element.id}} type="checkbox"
+                                   ng-model="confirmed"
+                                   ng-checked="$parent.isChecked(element.id)"
+                                   ng-change="$parent.changed(element.id, confirmed)">
                             <label for={{element.id}}>{{element.name}}</label>
                         </div>
-                    </div>
+                    </form>
 
-                    <div class="wg-angular-modal-body-footer">
+                    <div class="wg-angular-modal-body-footer clearfix">
                         <div class="wg-angular-modal-body-footer-info">
                             <h6>Now you have {{selectedItems.headLine}}:</h6>
                         </div>
-                        <div>
-                            <selected-element></selected-element>
-                        </div>
+                        <selected-element></selected-element>
                     </div>
 
                 </div>
