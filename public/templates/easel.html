@@ -59,13 +59,14 @@
                         </span>
                     </div>
 
-                    <form class="wg-angular-modal-body-content" name="wgForm">
+                    <form class="wg-angular-modal-body-content" name="wgModalBodyForm">
                         <div class="wg-angular-modal-body-content-element"
                              ng-repeat="element in model.elements track by $id(element)">
                             <input id={{element.id}} type="checkbox"
-                                   ng-model="confirmed"
-                                   ng-checked="$parent.isChecked(element.id)"
-                                   ng-change="$parent.changed(element.id, confirmed)">
+                                   ng-model="element.isChecked"
+                                   ng-checked="element.isChecked"
+                                   ng-disabled="element.isDisabled"
+                                   ng-change="$parent.changed(element.id, element.isChecked)">
                             <label for={{element.id}}>{{element.name}}</label>
                         </div>
                     </form>
