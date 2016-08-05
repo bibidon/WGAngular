@@ -24,8 +24,9 @@
     </div>
 
     <div class="wg-angular-easel-btn-container">
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bs-example-modal-lg">change your
-            selection
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bs-example-modal-lg"
+                ng-click="onChangeBtnClick()">
+            change your selection
         </button>
     </div>
 
@@ -80,7 +81,9 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                            ng-click="onSaveBtnClicked()">Save
+                    </button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>

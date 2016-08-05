@@ -5,10 +5,78 @@
 
 var app = angular.module('WGAngular', ['ngResource']);
 
-app.factory('modelsGetter', ['$resource', '$rootScope', function ($resource, $rootScope) {
+app.service('modelWorker', [function () {
+    var self = this,
+        getById = function (id, model) {
+            return _.find(model.elements, {'id': id});
+        },
+        getIndexById = function (id, model) {
+            return _.findIndex(model.elements, {'id': id});
+        };
+
+    this.update = function (selectedItemsModel) {
+        var quantity = selectedItemsModel.elements.length;
+
+        selectedItemsModel.headLine = quantity > 0 ? quantity + ' elements' : quantity + ' element';
+
+        return selectedItemsModel;
+    };
+
+    this.deleteSelectedElement = function (id, selectedItemsModel) {
+        selectedItemsModel.elements.splice(getIndexById(id, selectedItemsModel), 1);
+
+        self.update(selectedItemsModel);
+
+        return selectedItemsModel;
+    };
+
+    this.addElementToSelected = function (id, model, selectedItemsModel) {
+        selectedItemsModel.elements.push(getById(id, model));
+
+        self.update(selectedItemsModel);
+
+        return selectedItemsModel;
+    };
+
+    this.changeCheckedStatus = function (id, status, model) {
+        getById(id, model).isChecked = status;
+
+        return model;
+    };
+
+    this.changeDisabledStatus = function (status, model, selectedItemsModel) {
+        _.forEach(model.elements, function (element, index) {
+            if (status) {
+                element.isDisabled = !getById(index, selectedItemsModel) ? status : false;
+            } else {
+                element.isDisabled = false;
+            }
+        });
+
+        return model;
+    };
+
+    this.synchronizeModels = function (model, selectedItemsModel) {
+        _.forEach(model.elements, function (element, index) {
+            element.isChecked = !!getById(index, selectedItemsModel);
+        });
+
+        return model;
+    };
+
+    return {
+        updateSelectedModel: this.update,
+        deleteSelected: this.deleteSelectedElement,
+        addSelected: this.addElementToSelected,
+        changeCheckedStatus: this.changeCheckedStatus,
+        changeDisabledStatus: this.changeDisabledStatus,
+        synchronizeModels: this.synchronizeModels
+    }
+}]);
+
+app.factory('modelsGetter', ['$resource', '$rootScope', 'modelWorker', function ($resource, $rootScope, modelWorker) {
     var _model = {},
         _selectedItemsModel = {},
-        self = this,
         getModel = (function () {
             return $resource('../../public/data/:id.json', {}, {
                 query: {
@@ -48,7 +116,7 @@ app.factory('modelsGetter', ['$resource', '$rootScope', function ($resource, $ro
 
         _selectedItemsModel.elements = getSelectedItemsModel(_model.elements);
 
-        self.update(_selectedItemsModel.elements);
+        modelWorker.updateSelectedModel(_selectedItemsModel);
 
         $rootScope.$emit('context.ready');
     });
@@ -61,110 +129,89 @@ app.factory('modelsGetter', ['$resource', '$rootScope', function ($resource, $ro
         return _selectedItemsModel;
     };
 
-    this.deleteSelectedElement = function (id) {
-        var index = _.findIndex(_selectedItemsModel.elements, {'id': id});
+    this.setSelectedModel = function (model) {
+        _selectedItemsModel.headLine = model.headLine;
 
-        _selectedItemsModel.elements.splice(index, 1);
+        _selectedItemsModel.elements.splice(0, _selectedItemsModel.elements.length);
 
-        this.update(_selectedItemsModel.elements);
-    };
-
-    this.addElementToSelected = function (id) {
-        var element = _.find(_model.elements, {'id': id});
-
-        _selectedItemsModel.elements.push(element);
-
-        this.update(_selectedItemsModel.elements);
-    };
-
-    this.update = function (model) {
-        var quantity = model.length;
-
-        _selectedItemsModel.headLine = quantity > 0 ? quantity + ' elements' : quantity + ' element';
-        _selectedItemsModel.elements = model;
+        _.forEach(model.elements, function (element) {
+            _selectedItemsModel.elements.push(element);
+        })
     };
 
     return {
         getModel: this.getModel,
         getSelectedItems: this.getSelectedItems,
-        deleteSelectedElement: this.deleteSelectedElement,
-        addElementToSelected: this.addElementToSelected,
-        update: this.update
+        setSelectedModel: this.setSelectedModel
     };
 }]);
 
-app.controller('EaselController', ['$scope', 'modelsGetter', function ($scope, modelsGetter) {
+app.controller('EaselController', ['$rootScope', '$scope', 'modelsGetter', 'modelWorker', function ($rootScope, $scope, modelsGetter, modelWorker) {
     $scope.selectedItems = modelsGetter.getSelectedItems();
+
+    $scope.onChangeBtnClick = function () {
+        $rootScope.$emit('change.btn.clicked');
+    };
+
+    $scope.$on('selected.deleted', function (event, id) {
+        modelWorker.deleteSelected(id, $scope.selectedItems);
+    });
 }]);
 
-app.controller('ModalController', ['$rootScope', '$scope', 'modelsGetter', function ($rootScope, $scope, modelsGetter) {
+app.controller('ModalController', ['$rootScope', '$scope', 'modelsGetter', 'modelWorker', function ($rootScope, $scope, modelsGetter, modelWorker) {
     var needDisable = function () {
-            return $scope.selectedItems.elements.length === 3;
-        },
-        changeDisabledStatus = function (status) {
-            var i, ln, element;
-
-            for (i = 0, ln = $scope.model.elements.length; i < ln; i++) {
-                element = _.find($scope.selectedItems.elements, {'id': i});
-
-                if (!element) {
-                    $scope.model.elements[i].isDisabled = status;
-                }
-            }
-        };
+        return $scope.selectedItems.elements.length === 3;
+    };
 
     $scope.model = modelsGetter.getModel();
     $scope.selectedItems = modelsGetter.getSelectedItems();
+
+    $scope.checkStatus = function () {
+        modelWorker.changeDisabledStatus(needDisable(), $scope.model, $scope.selectedItems);
+    };
+
+    $scope.changed = function (id, isCheck) {
+        if (isCheck) {
+            modelWorker.addSelected(id, $scope.model, $scope.selectedItems);
+        } else {
+            modelWorker.deleteSelected(id, $scope.selectedItems);
+        }
+
+        $scope.checkStatus();
+    };
+
+    $scope.onSaveBtnClicked = function () {
+        modelsGetter.setSelectedModel($scope.selectedItems);
+    };
 
     $rootScope.$on('context.ready', function () {
         $scope.selectedItems = _.cloneDeep(modelsGetter.getSelectedItems());
     });
 
-    $rootScope.$on('selected.deleted', function (event, id) {
-        var index = _.findIndex($scope.selectedItems.elements, {'id': id});
-
-        $scope.selectedItems.elements.splice(index, 1);
-
-        var quantity = $scope.selectedItems.elements.length;
-
-        $scope.selectedItems.headLine = quantity > 0 ? quantity + ' elements' : quantity + ' element';
+    $scope.$on('selected.deleted', function (event, id) {
+        modelWorker.deleteSelected(id, $scope.selectedItems);
 
         $scope.checkStatus();
-        $scope.changeCheckedStatus(id, false);
+
+        modelWorker.changeCheckedStatus(id, false, $scope.model);
     });
 
-    $scope.checkStatus = function () {
-        if (needDisable()) {
-            changeDisabledStatus(true);
-        } else {
-            changeDisabledStatus(false);
-        }
-    };
+    $rootScope.$on('change.btn.clicked', function () {
+        $scope.selectedItems = _.cloneDeep(modelsGetter.getSelectedItems());
 
-    $scope.changed = function (id, isCheck) {
-        if (isCheck) {
-            modelsGetter.addElementToSelected(id);
-        } else {
-            modelsGetter.deleteSelectedElement(id);
-        }
+        modelWorker.synchronizeModels($scope.model, $scope.selectedItems);
 
         $scope.checkStatus();
-    };
-
-    $scope.changeCheckedStatus = function (id, status) {
-        var element = _.find($scope.model.elements, {'id': id});
-
-        element.isChecked = status;
-    };
+    });
 }]);
 
-app.directive('selectedElement', ['modelsGetter', '$rootScope', function (modelsGetter, $rootScope) {
+app.directive('selectedElement', [function () {
     function link($scope, $element, $attr) {
     }
 
     function controller($scope, $element, $attrs, $transclude) {
         $scope.deleteSelected = function (id) {
-            $rootScope.$emit('selected.deleted', id);
+            $scope.$broadcast('selected.deleted', id);
         };
     }
 
