@@ -103,19 +103,33 @@ module.exports = function (grunt) {
                 },
                 files: {
                     'compiled/js/WGAngular.js': [
-                        'src/app/WGAngular.js'
+                        'src/app/WGAngular.js',
+                        'src/app/services/ModelWorker.js',
+                        'src/app/services/ModelsGetter.js',
+                        'src/app/controllers/EaselController.js',
+                        'src/app/controllers/ModalController.js',
+                        'src/app/directives/SelectedElements.js'
+                    ]
+                }
+            },
+            prod: {
+                options: {
+                    compress: {},
+                    beautify: false,
+                    mangle: true,
+                    banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */'
+                },
+                files: {
+                    'compiled/js/WGAngular.js': [
+                        'src/app/WGAngular.js',
+                        'src/app/services/ModelWorker.js',
+                        'src/app/services/ModelsGetter.js',
+                        'src/app/controllers/EaselController.js',
+                        'src/app/controllers/ModalController.js',
+                        'src/app/directives/SelectedElements.js'
                     ]
                 }
             }
-            //prod: {
-            //    options: {
-            //        compress: {},
-            //        beautify: false,
-            //        mangle: true,
-            //        banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */'
-            //    },
-            //    files: grunt.file.readJSON('_uglify/uglify.prod.json')
-            //}
         },
         sass: {
             check: {
@@ -162,6 +176,19 @@ module.exports = function (grunt) {
                         'compiled/scss/modal.css'
                     ]
                 }
+            },
+            prod: {
+                options: {
+                    expand: true
+                },
+                files: {
+                    'compiled/css/easel.css': [
+                        'compiled/scss/easel.css'
+                    ],
+                    'compiled/css/modal.css': [
+                        'compiled/scss/modal.css'
+                    ]
+                }
             }
         },
         concurrent: {
@@ -187,5 +214,6 @@ module.exports = function (grunt) {
     grunt.registerTask('copy-resources', ['copy:thirdParty']);
     grunt.registerTask('sass-compile', ['sass:check', 'sass:compile']);
 
-    grunt.registerTask('development', ['clean', 'copy-resources', 'jslint:client', 'sass-compile', 'uglify:thirdParty', 'uglify:dev', 'cssmin:thirdParty', 'cssmin:dev', 'concurrent:watch']);
+    grunt.registerTask('development-dev', ['clean', 'copy-resources', 'jslint:client', 'sass-compile', 'uglify:thirdParty', 'uglify:dev', 'cssmin:thirdParty', 'cssmin:dev', 'concurrent:watch']);
+    grunt.registerTask('development-prod', ['clean', 'copy-resources', 'jslint:client', 'sass-compile', 'uglify:thirdParty', 'uglify:prod', 'cssmin:thirdParty', 'cssmin:prod', 'concurrent:watch']);
 };

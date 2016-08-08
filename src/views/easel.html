@@ -16,7 +16,7 @@
 
     <header>
         <h3>Elements selection</h3>
-        <h6>Now you have {{selectedItems.headLine}}:</h6>
+        <h6>Now you have {{easel.selectedItems.headLine}}:</h6>
     </header>
 
     <div class="wg-angular-selected-elements-container clearfix">
@@ -25,7 +25,7 @@
 
     <div class="wg-angular-easel-btn-container">
         <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bs-example-modal-lg"
-                ng-click="onChangeBtnClick()">
+                ng-click="easel.onChangeBtnClick()">
             change your selection
         </button>
     </div>
@@ -47,27 +47,26 @@
                     <div class="wg-angular-modal-body-header clearfix">
                         <span class="wg-angular-search-container pull-left">
                             <label for="wg-angular-search">Search</label>
-                            <input id="wg-angular-search" type="text">
+                            <input id="wg-angular-search" type="text" ng-model="modal.searchText">
                         </span>
                         <span class="wg-angular-filter-container pull-right">
                             <label for="wg-angular-filter">Filter</label>
-                            <select id="wg-angular-filter">
-                                <option value="*.*">without filter</option>
-                                <option value=">10">number > 10</option>
-                                <option value=">100">number > 100</option>
-                                <option value=">200">number > 200</option>
+                            <select id="wg-angular-filter"
+                                    ng-init="modal.currentFilter = modal.filterById[0]"
+                                    ng-model="modal.currentFilter"
+                                    ng-options="option.name for option in modal.filterById">
                             </select>
                         </span>
                     </div>
 
                     <form class="wg-angular-modal-body-content" name="wgModalBodyForm">
                         <div class="wg-angular-modal-body-content-element"
-                             ng-repeat="element in model.elements track by $id(element)">
+                             ng-repeat="element in modal.model.elements | filter:modal.searchText | filter:modal.customFilter">
                             <input id={{element.id}} type="checkbox"
                                    ng-model="element.isChecked"
                                    ng-checked="element.isChecked"
                                    ng-disabled="element.isDisabled"
-                                   ng-change="$parent.changed(element.id, element.isChecked)">
+                                   ng-change="$parent.modal.changed(element.id, element.isChecked)">
                             <label for={{element.id}}>{{element.name}}</label>
                         </div>
                     </form>
@@ -82,7 +81,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal"
-                            ng-click="onSaveBtnClicked()">Save
+                            ng-click="modal.onSaveBtnClicked()">Save
                     </button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
