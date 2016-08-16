@@ -63,6 +63,12 @@ module.exports = function (grunt) {
                     expand: true,
                     filter: 'isFile'
                 }, {
+                    src: ['node_modules/angular-route/angular-route.min.js'],
+                    dest: 'public/thirdParty/angular-route/',
+                    flatten: true,
+                    expand: true,
+                    filter: 'isFile'
+                }, {
                     src: ['node_modules/lodash/lodash.min.js'],
                     dest: 'public/thirdParty/lodash/',
                     flatten: true,
@@ -89,6 +95,7 @@ module.exports = function (grunt) {
                         'public/thirdParty/jquery/jquery.min.js',
                         'public/thirdParty/angular/angular.min.js',
                         'public/thirdParty/angular-resource/angular-resource.min.js',
+                        'public/thirdParty/angular-route/angular-route.min.js',
                         'public/thirdParty/lodash/lodash.min.js',
                         'public/thirdParty/bootstrap/js/bootstrap.min.js'
                     ]

@@ -21,7 +21,8 @@
     "angular": "^1.5.7",
     "lodash": "^4.13.1",
     "bootstrap": "^3.3.6",
-    "angular-resource": "1.5.x"
+    "angular-resource": "1.5.x",
+    "angular-route": "1.5.8"
   },
   "scripts": {
     "start": "http-server -a localhost -p 8000 -c-1 ./"
