@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="WGAngular">
+<html lang="en" ng-app="WGAngular" ng-strict-di>
 <head>
     <base href="/">
 
@@ -8,18 +8,22 @@
     <meta name="viewport" content="width=device-width">
 
     <link rel="stylesheet" href="compiled/css/thirdParty.css">
+
     <link rel="stylesheet" href="compiled/css/easel.css">
     <link rel="stylesheet" href="compiled/css/modal.css">
 </head>
 <body>
-<script src="compiled/js/thirdParty.js"></script>
-<script src="compiled/js/WGAngular.js"></script>
 
-<h1>Welcome to WGAngular start page</h1>
+<div class="container text-center" ng-show="enableLandingPage" ng-controller="LandingController as landing">
+    <h1>Welcome to WGAngular landing page</h1>
 
-<a href="/easel">Start</a>
+    <h2><a href="/easel">Start</a></h2>
+</div>
 
 <div ng-view></div>
+
+<script src="compiled/js/thirdParty.js"></script>
+<script src="compiled/js/WGAngular.js"></script>
 
 </body>
 </html>

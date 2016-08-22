@@ -113,6 +113,7 @@ module.exports = function (grunt) {
                         'src/app/WGAngular.js',
                         'src/app/services/ModelWorker.js',
                         'src/app/services/ModelsGetter.js',
+                        'src/app/controllers/LandingController.js',
                         'src/app/controllers/EaselController.js',
                         'src/app/controllers/ModalController.js',
                         'src/app/directives/SelectedElements.js'
@@ -131,6 +132,7 @@ module.exports = function (grunt) {
                         'src/app/WGAngular.js',
                         'src/app/services/ModelWorker.js',
                         'src/app/services/ModelsGetter.js',
+                        'src/app/controllers/LandingController.js',
                         'src/app/controllers/EaselController.js',
                         'src/app/controllers/ModalController.js',
                         'src/app/directives/SelectedElements.js'
