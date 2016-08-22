@@ -69,6 +69,12 @@ module.exports = function (grunt) {
                     expand: true,
                     filter: 'isFile'
                 }, {
+                    src: ['node_modules/angular-mocks/angular-mocks.js'],
+                    dest: 'public/thirdParty/angular-mocks/',
+                    flatten: true,
+                    expand: true,
+                    filter: 'isFile'
+                }, {
                     src: ['node_modules/lodash/lodash.min.js'],
                     dest: 'public/thirdParty/lodash/',
                     flatten: true,
@@ -96,6 +102,7 @@ module.exports = function (grunt) {
                         'public/thirdParty/angular/angular.min.js',
                         'public/thirdParty/angular-resource/angular-resource.min.js',
                         'public/thirdParty/angular-route/angular-route.min.js',
+                        'public/thirdParty/angular-mocks/angular-mocks.js',
                         'public/thirdParty/lodash/lodash.min.js',
                         'public/thirdParty/bootstrap/js/bootstrap.min.js'
                     ]
@@ -208,6 +215,11 @@ module.exports = function (grunt) {
                     logConcurrentOutput: true
                 }
             }
+        },
+        karma: {
+            unit: {
+                configFile: 'karma.config.js'
+            }
         }
     });
 
@@ -219,9 +231,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-jslint');
+    grunt.loadNpmTasks('grunt-karma');
 
     grunt.registerTask('copy-resources', ['copy:thirdParty']);
     grunt.registerTask('sass-compile', ['sass:check', 'sass:compile']);
+
+    grunt.registerTask('test', ['karma:unit']);
 
     grunt.registerTask('development-dev', ['clean', 'copy-resources', 'jslint:client', 'sass-compile', 'uglify:thirdParty', 'uglify:dev', 'cssmin:thirdParty', 'cssmin:dev', 'concurrent:watch']);
     grunt.registerTask('development-prod', ['clean', 'copy-resources', 'jslint:client', 'sass-compile', 'uglify:thirdParty', 'uglify:prod', 'cssmin:thirdParty', 'cssmin:prod', 'concurrent:watch']);
