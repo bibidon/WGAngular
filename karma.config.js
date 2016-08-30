@@ -12,7 +12,7 @@ module.exports = function (config) {
         ],
         autoWatch: true,
         frameworks: ['mocha', 'chai', 'sinon-chai'],
-        browsers: ['PhantomJS'],
+        browsers: ['Chrome'],
         interface: 'bdd',
         singleRun: true,
         port: 9876,

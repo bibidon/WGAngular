@@ -15,17 +15,18 @@
     "grunt-concurrent": "^2.3.0",
     "grunt-contrib-sass": "^1.0.0",
     "grunt-karma": "^2.0.0",
+    "grunt-protractor-runner": "^3.2.0",
     "http-server": "^0.9.0",
-    "jasmine-core": "^2.4.1",
     "karma": "^1.2.0",
     "karma-chai": "^0.1.0",
     "karma-mocha": "^1.1.1",
     "karma-mocha-reporter": "^2.1.0",
     "karma-coverage": "^1.1.1",
-    "karma-phantomjs-launcher": "^1.0.1",
+    "karma-chrome-launcher": "^2.0.0",
     "karma-sinon-chai": "^1.2.3",
+    "karma-jasmine": "^1.0.2",
     "mocha": "^3.0.2",
-    "phantomjs": "^2.1.7"
+    "protractor": "^4.0.4"
   },
   "dependencies": {
     "jquery": "^2.1.4",
@@ -37,11 +38,12 @@
     "angular-mocks": "^1.5.8"
   },
   "scripts": {
-    "prestart": "npm install",
     "start": "http-server -a localhost -p 8000 -c-1 ./",
 
-    "pretest": "npm install",
-    "test": "karma start karma.conf.js",
-    "test-single-run": "karma start karma.conf.js --single-run"
+    "test": "karma start karma.config.js",
+    "test-single-run": "karma start karma.config.js --single-run",
+
+    "preprotractor": "npm run ./node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update",
+    "protractor": "protractor ./protractor.config.js"
   }
 }

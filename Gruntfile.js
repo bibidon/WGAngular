@@ -219,6 +219,27 @@ module.exports = function (grunt) {
         karma: {
             unit: {
                 configFile: 'karma.config.js'
+            },
+            continuous: {
+                configFile: 'config/karma.conf.js',
+                singleRun: true
+            }
+        },
+        protractor: {
+            options: {
+                configFile: "protractor.config.js",
+                noColor: false,
+                args: {}
+            },
+            e2e: {
+                options: {
+                    keepAlive: false
+                }
+            },
+            continuous: {
+                options: {
+                    keepAlive: true
+                }
             }
         }
     });
@@ -232,11 +253,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-jslint');
     grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-protractor-runner');
 
     grunt.registerTask('copy-resources', ['copy:thirdParty']);
     grunt.registerTask('sass-compile', ['sass:check', 'sass:compile']);
 
-    grunt.registerTask('test', ['karma:unit']);
+    grunt.registerTask('test', ['karma:unit', 'protractor:e2e']);
 
     grunt.registerTask('development-dev', ['clean', 'copy-resources', 'jslint:client', 'sass-compile', 'uglify:thirdParty', 'uglify:dev', 'cssmin:thirdParty', 'cssmin:dev', 'concurrent:watch']);
     grunt.registerTask('development-prod', ['clean', 'copy-resources', 'jslint:client', 'sass-compile', 'uglify:thirdParty', 'uglify:prod', 'cssmin:thirdParty', 'cssmin:prod', 'concurrent:watch']);

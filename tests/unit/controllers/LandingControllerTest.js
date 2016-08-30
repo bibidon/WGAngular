@@ -1,6 +1,9 @@
 /**
  * Created by DenisLutcevich on 22/08/2016.
  */
+
+'use strict';
+
 describe('LandingController', function () {
     var $controller, $rootScope, $scope;
 
