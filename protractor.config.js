@@ -3,20 +3,19 @@
  */
 
 exports.config = {
-
     allScriptsTimeout: 11000,
-
+    chromeOnly: true,
+    baseUrl: 'http://localhost:8000/',
+    framework: 'jasmine',
     specs: [
         'tests/e2e/*.js'
     ],
-
     capabilities: {
         'browserName': 'chrome'
     },
-
-    chromeOnly: true,
-
-    baseUrl: 'http://localhost:8000/',
-
-    framework: 'jasmine'
+    jasmineNodeOpts: {
+        showColors: true,
+        isVerbose : true,
+        includeStackTrace : true
+    }
 };

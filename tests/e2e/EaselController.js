@@ -1,26 +1,22 @@
 /**
  * Created by DenisLutcevich on 26/08/2016.
  */
-describe('EaselController', function() {
-    //describe('phoneList', function() {
-    //
-    //    beforeEach(function() {
-    //        browser.get('index.html');
-    //    });
-    //
-    //    it('should filter the phone list as a user types into the search box', function() {
-    //        var phoneList = element.all(by.repeater('phone in $ctrl.phones'));
-    //        var query = element(by.model('$ctrl.query'));
-    //
-    //        expect(phoneList.count()).toBe(3);
-    //
-    //        query.sendKeys('nexus');
-    //        expect(phoneList.count()).toBe(1);
-    //
-    //        query.clear();
-    //        query.sendKeys('motorola');
-    //        expect(phoneList.count()).toBe(2);
-    //    });
-    //
-    //});
+describe('EaselController', function () {
+    beforeEach(function () {
+        browser.get('index.html');
+    });
+
+    describe('#onChangeBtnClick', function () {
+        var selectedElements;
+
+        beforeEach(function () {
+            element(by.tagName('a')).click();
+            selectedElements = element.all(by.repeater('element in selectedItems.elements')).count();
+        });
+
+        it('should has 3 element after bootstrapping application', function () {
+            expect(selectedElements).toEqual(3)
+        });
+
+    });
 });

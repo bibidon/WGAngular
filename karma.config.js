@@ -8,7 +8,7 @@ module.exports = function (config) {
         files: [
             'compiled/js/thirdParty.js',
             'src/app/**/*.js',
-            'tests/**/*.js'
+            'tests/unit/**/*.js'
         ],
         autoWatch: true,
         frameworks: ['mocha', 'chai', 'sinon-chai'],

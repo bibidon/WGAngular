@@ -219,26 +219,18 @@ module.exports = function (grunt) {
         karma: {
             unit: {
                 configFile: 'karma.config.js'
-            },
-            continuous: {
-                configFile: 'config/karma.conf.js',
-                singleRun: true
             }
         },
         protractor: {
             options: {
                 configFile: "protractor.config.js",
+                keepAlive: true,
                 noColor: false,
                 args: {}
             },
             e2e: {
                 options: {
                     keepAlive: false
-                }
-            },
-            continuous: {
-                options: {
-                    keepAlive: true
                 }
             }
         }
